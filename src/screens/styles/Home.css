@@ -1,0 +1,42 @@
+@font-face {
+    font-family: myFont;
+    src: url("../../assets/GoldenRatio-Demo.otf");
+}
+.home-body {
+    font-family: myFont;
+    width: 86%;
+    margin-left: 7%;
+    margin-right: 7%;
+    text-align: center;
+}
+.home-button {
+    width: 100%;
+    background-color: #2ecc71;
+    border: none;
+    border-radius: 0.25rem;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    height: 68px;
+}
+.home-button-text {
+    color: white;
+    font-size: 34px;
+    margin: 0px;
+}
+
+.home-logo {
+    width: 30%;
+    margin-top: 20px;
+    margin-bottom: 120px;
+}
+
+@media (max-width: 768px) {
+    .home-logo {
+        width: 90%;
+        margin-bottom: 120px;
+    }
+    #home-top-col {
+        margin-bottom: 20px;
+    }
+ }

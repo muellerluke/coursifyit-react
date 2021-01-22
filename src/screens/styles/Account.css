@@ -77,19 +77,41 @@
     background-color: #c0392b;
 }
 
+.account-review-none h5 {
+    color: black;
+}
+.account-review-none {
+    list-style: none;
+}
+
+.account-body-delete {
+    width: 50%;
+    background-color: #e74c3c;
+    border-radius: 0.25rem;
+    border: none;
+    color: white;
+    height: 55px;
+    margin-top: 2%;
+}
+
+.account-body-delete:hover{
+    background-color: #c0392b;
+}
 @media (max-width: 768px) { 
     .account-body-header {
         width: 90%;
     }
     .account-body-reviews {
         width: 90%;
-    }
-    
+    }   
     .account-body-header-footer-button {
         width: 100%;
         margin-bottom: 10px;
     }
     #reset-button {
         margin-bottom: 0px;
+    }
+    .account-body-delete {
+        width: 90%;
     }
 }

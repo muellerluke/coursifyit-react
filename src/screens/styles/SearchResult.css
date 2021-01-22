@@ -1,0 +1,70 @@
+#search-result-public {
+    background-color: azure;
+    padding-top: 5px;
+    margin: auto;
+    border-radius: 0.25rem;
+    width: 50%;
+}
+#search-result-public:hover {
+    cursor: pointer;
+}
+.search-result-public-text {
+    color: black;
+}
+.search-result-body {
+    margin-bottom: 1px;
+}
+.private-div {
+    background-color: #2c3e50;
+    padding: 10px;
+    width: 100%;
+}
+.review-label {
+    color: white;
+    margin-top: 5px;
+    margin-bottom: 0px;
+    text-align: center;
+}
+.tool {
+    visibility: hidden;
+    width: 150px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute;
+    margin-top: -50px;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.review-label:hover .tool {
+    visibility: visible;
+    opacity: 0.9;
+}
+.span-data {
+    background-color: #2ecc71;
+    border-radius: 0.25rem;
+    padding-right: 1px;
+    padding-left: 2px;
+    padding-top: 2px;
+}
+.span-data-no {
+    margin-left: 5px;
+}
+
+@media (max-width: 768px) {
+    #search-result-public {
+        width: 90%;
+    }
+    .review-label {
+        color: white;
+        margin-top: 5px;
+        margin-bottom: 0px;
+        text-align: left;
+    }
+    .span-data-yes {
+        margin-left: 50%;
+    }
+ }

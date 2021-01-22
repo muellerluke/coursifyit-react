@@ -14,6 +14,7 @@ import Review from "./screens/Review";
 import About from "./screens/About";
 import Account from "./screens/Account";
 import Login from "./screens/Login";
+import Directions from "./screens/Directions";
 
 class BootstrapNavbar extends React.Component {
   constructor(props) {
@@ -21,8 +22,12 @@ class BootstrapNavbar extends React.Component {
     this.state = {
       accountTabClass: "ml-auto",
       loggedIn: this.props.loggedIn,
+      searchTokens: localStorage.getItem("searches"),
+      displayDirections: true,
     };
     this.loginSuccess = this.loginSuccess.bind(this);
+    this.logoutSuccess = this.logoutSuccess.bind(this);
+    this.updateSearchTokens = this.updateSearchTokens.bind(this);
   }
 
   componentDidMount() {
@@ -33,6 +38,12 @@ class BootstrapNavbar extends React.Component {
   loginSuccess() {
     this.setState({loggedIn: true});
   }
+  logoutSuccess() {
+    this.setState({loggedIn: false});
+  }
+  updateSearchTokens() {
+    this.setState({searchTokens: localStorage.getItem("searches")});
+  }
 
   render() {
     return (
@@ -42,7 +53,7 @@ class BootstrapNavbar extends React.Component {
             <Router>
               <Navbar variant="dark" expand="lg" sticky="top">
                 <Navbar.Brand href="/" className="mx-auto">
-                  <img src={navBarLogo} alt=""></img>
+                  <img src={navBarLogo} id="navBarLogo" alt=""></img>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
@@ -94,7 +105,7 @@ class BootstrapNavbar extends React.Component {
                               : "account-passive"
                           }
                         >
-                          {this.state.loggedIn ? String.fromCodePoint(0x1f50e) + localStorage.getItem("searches") + " Account" : "Login / Register"}
+                          {this.state.loggedIn ? String.fromCodePoint(0x1f50e) + this.state.searchTokens + " Account" : "Login / Register"}
                         </h1>
                       </div>
                     </Nav.Link>
@@ -106,16 +117,16 @@ class BootstrapNavbar extends React.Component {
                   <Home />
                 </Route>
                 <Route path="/search">
-                  <Search />
+                  <Search updateSearchTokens={this.updateSearchTokens} loggedIn={this.state.loggedIn}/>
                 </Route>
                 <Route path="/review">
-                  <Review />
+                  <Review loggedIn={this.state.loggedIn}/>
                 </Route>
                 <Route path="/about">
                   <About />
                 </Route>
                 <Route path="/account">
-                  <Account loggedIn={this.state.loggedIn}/>
+                  <Account loggedIn={this.state.loggedIn} logoutSuccess={this.logoutSuccess} updateSearchTokens={this.updateSearchTokens}/>
                 </Route>
                 <Route path="/login">
                   <Login loginSuccess={this.loginSuccess}/>
@@ -124,6 +135,7 @@ class BootstrapNavbar extends React.Component {
             </Router>
           </div>
         </div>
+        <Directions/>
       </div>
     );
   }

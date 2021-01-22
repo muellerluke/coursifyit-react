@@ -1,7 +1,7 @@
 import React from "react";
 import "./styles/Login.css";
 import { PropTypes } from 'react'
-import { login } from "../api";
+import { login, forgotMyPassword, registerUser } from "../api";
 import logo from "../assets/LOGO_RGB_OUTLINED.png";
 import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 
@@ -18,6 +18,7 @@ class Login extends React.Component {
       passwordValid: true,
       loginAttempt: false,
       invalidCredentials: false,
+      forgotPassword: false,
     };
 
     this.usernameChanged = this.usernameChanged.bind(this);
@@ -52,16 +53,47 @@ class Login extends React.Component {
   }
 
   submitLogin() {
-    login(this.state.username, this.state.password).then((response) => {
-      if (response) {
-        this.props.loginSuccess();
-        this.setState({invalidCredentials: false});
-        this.setState({loginAttempt: true});
+        if (!this.state.signUp && !this.state.forgotPassword) {
+      login(this.state.username, this.state.password).then((response) => {
+        if (response) {
+          this.props.loginSuccess();
+          this.setState({invalidCredentials: false});
+          this.setState({loginAttempt: true});
+        } else {
+          this.setState({invalidCredentials: true});
+          this.setState({loginAttempt: true});
+        }
+      });
+    } 
+    else if (this.state.signUp && !this.state.forgotPassword) {
+      if (this.state.password === this.state.rePassword && this.state.username.indexOf(".edu") > -1 && this.state.checked) {
+        registerUser(this.state.username, this.state.password).then((response) => {
+          if (response) {
+            this.props.loginSuccess();
+            this.setState({invalidCredentials: false});
+            this.setState({loginAttempt: true});
+          } else {
+            this.setState({invalidCredentials: true});
+            this.setState({loginAttempt: true});
+          }
+        })
       } else {
         this.setState({invalidCredentials: true});
         this.setState({loginAttempt: true});
       }
-    });
+
+    } 
+    else if (!this.state.signUp && this.state.forgotPassword) {
+      this.setState({loginAttempt: true});
+      forgotMyPassword(this.state.username).then((response) => {
+        if (response) {
+          this.setState({usernameValid: true});
+        } else {
+          this.setState({usernameValid: false});
+        }
+      })
+    }
+    
   }
 
   toggleSignUp(event) {
@@ -89,16 +121,21 @@ class Login extends React.Component {
           
         </div>
       )
+    } else if (!this.state.forgotPassword && !this.state.signUp) {
+      return (
+        <button className="forgot-button" onClick={() => this.setState({forgotPassword: true})}><span className="forgot-text">forgot my password</span></button>
+      );
     } else {
       return (
-        <button className="forgot-button"><span className="forgot-text">forgot my password</span></button>
+        <button className="forgot-button" onClick={() => this.setState({forgotPassword: false, loginAttempt: false})}><span className="forgot-text">I remembered it</span></button>
       );
     }
   }
+
   renderAlert() {
     if (!this.state.loginAttempt) {
       return null
-    } else {
+    } else if (this.state.loginAttempt && !this.state.forgotPassword) {
       if (this.state.signUp) {
         if (!this.state.passwordValid) {
           return (
@@ -116,6 +153,10 @@ class Login extends React.Component {
           return (
             <p>You must agree to the privacy policy to register.</p>
           )
+        } else if (this.state.invalidCredentials){
+          return (
+            <p>An account has already been registered with this email address.</p>
+          )
         } else {
           return null;
         }
@@ -126,11 +167,20 @@ class Login extends React.Component {
           )
         }
       }
-
+    } else if (this.state.loginAttempt && this.state.forgotPassword) {
+      if (this.state.usernameValid) {
+        return (
+          <p>Check your email for link to reset your password.</p>
+        )
+      } else {
+        return (
+          <p>Email address invalid.</p>
+        )
+      }
     }
   }
   renderRedirect = () => {
-    if (!this.state.invalidCredentials && this.state.loginAttempt) {
+    if (!this.state.invalidCredentials && this.state.loginAttempt && !this.state.forgotPassword) {
       return <Redirect to={{
         pathname: '/account',
     }} />
@@ -167,14 +217,14 @@ class Login extends React.Component {
             onChange={this.usernameChanged}
             placeholder="Student Email Address"
             />
-            <input
+            {!this.state.forgotPassword && <input
             type="password"
             name="password"
             className="password-input input"
             value={this.state.password}
             onChange={this.passwordChanged}
             placeholder="Password"
-            />
+            />}
             {this.renderRePassword()}
             {this.renderAlert()}
             {this.renderRedirect()}

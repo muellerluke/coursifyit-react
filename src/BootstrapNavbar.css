@@ -46,7 +46,7 @@ img {
 }
 
 @media (max-width: 768px) {
-    img {
+    #navBarLogo {
         margin-right: -56px;
     }
     .account-button {

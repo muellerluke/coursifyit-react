@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import BootstrapNavbar from "./BootstrapNavbar";
+import {verifyToken} from "./api";
 
 class App extends React.Component {
   constructor() {
@@ -18,12 +19,17 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.state.loggedIn);
     try {
       var token = localStorage.getItem("token");
       if (token) {
         console.log("token");
-        this.setState({loggedIn: true});
+        verifyToken().then((verified) => {
+          if (verified) {
+            this.setState({loggedIn: true});
+          } else {
+            this.setState({loggedIn: false});
+          }
+        })
       } else {
         console.log("no token");
         this.setState({loggedIn: false});
@@ -32,6 +38,7 @@ class App extends React.Component {
       console.log("error");
       this.setState({loggedIn: false});
     }
+    console.log(this.state.verified);
   }
   componentDidUpdate() {
     console.log(this.state.loggedIn);

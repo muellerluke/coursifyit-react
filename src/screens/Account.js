@@ -1,7 +1,7 @@
 import React from "react";
 import "./styles/Account.css";
 import AccountReview from "./AccountReview";
-import {getReviews, logOut, sendVerification, resetPassword} from "../api";
+import {getReviews, logOut, sendVerification, resetPassword, deleteAccount} from "../api";
 import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 
 class Account extends React.Component {
@@ -21,8 +21,10 @@ class Account extends React.Component {
     this.checkReviews = this.checkReviews.bind(this);
     this.sendVerificationClick = this.sendVerificationClick.bind(this);
     this.resetPasswordClick = this.resetPasswordClick.bind(this);
+    this.deleteAccountClick = this.deleteAccountClick.bind(this);
   }
   componentDidMount() {
+    this.props.updateSearchTokens();
     this.setState({username: localStorage.getItem("username")})
     if (window.innerWidth <= 768) {
       if (localStorage.getItem("verified") === "true") {
@@ -47,12 +49,16 @@ class Account extends React.Component {
 
 
   renderReviews() {
-    if (this.state.reviewsLoaded === true && localStorage.getItem("username") !== "") {
+    if (this.state.reviewsLoaded === true && localStorage.getItem("username") !== "" && this.state.data.length > 0) {
       return (
         this.state.data.map((item, i) => <AccountReview review={item} key={i}></AccountReview>)
       )
     } else {
-      return null;
+      return (
+        <li className="account-review-none">
+          <h5>You have no reviews</h5>
+        </li>
+      );
     }
   }
   logOutClick() {
@@ -60,9 +66,16 @@ class Account extends React.Component {
       this.setState({logOutState: true});
     })
   }
+  deleteAccountClick() {
+    if (window.confirm("Are you sure you want to delete your account?"))
+    deleteAccount().then(() => {
+      this.setState({logOutState: true});
+    })
+  }
 
   renderRedirect = () => {
     if (this.state.logOutState) {
+      this.props.logoutSuccess();
       return <Redirect to={{
         pathname: '/',
     }} />
@@ -120,6 +133,7 @@ class Account extends React.Component {
           </div>
           {this.renderReviews()}
         </div>
+        <button className="account-body-delete" onClick={this.deleteAccountClick}>Delete Account</button>
         {this.checkReviews()}
         {this.renderRedirect()}
       </div>;
