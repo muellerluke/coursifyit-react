@@ -14,6 +14,7 @@ import Review from "./screens/Review";
 import About from "./screens/About";
 import Account from "./screens/Account";
 import Login from "./screens/Login";
+import PasswordReset from "./screens/PasswordReset";
 import Directions from "./screens/Directions";
 
 class BootstrapNavbar extends React.Component {
@@ -130,6 +131,9 @@ class BootstrapNavbar extends React.Component {
                 </Route>
                 <Route path="/login">
                   <Login loginSuccess={this.loginSuccess}/>
+                </Route>
+                <Route path="/passwordreset">
+                  <PasswordReset/>
                 </Route>
               </Switch>
             </Router>

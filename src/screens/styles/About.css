@@ -1,0 +1,57 @@
+@font-face {
+    font-family: myFont;
+    src: url("../../assets/GoldenRatio-Demo.otf");
+}
+
+.about-container {
+    border: none;
+    margin: auto;
+    margin-top: 20px;
+    border-radius: 0.25rem;
+    height: auto;
+    width: 70%;
+    background-color: azure;
+    font-family: myFont;
+  }
+  
+  .about-container-header {
+    text-align: center;
+    border: none;
+    border-bottom: 1px solid #bdc3c7;
+    padding: 15px;
+  }
+  
+  .about-container-body {
+    padding: 15px;
+  }
+  
+  #privacyPolicyBody {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  .about-page-footer {
+    bottom: auto;
+    margin-top: 200px;
+  }
+  
+  .about-container-body .row {
+    height: auto;
+  }
+  
+  .about-h6 {
+    padding: 15px;
+  }
+  
+  #about-col {
+    width: auto;
+  }
+
+  @media (max-width: 758px) {
+
+    .about-container {
+        width: 90%;
+    }
+    #about-last-container {
+        margin-bottom: 100px;
+    }
+  }

@@ -116,7 +116,7 @@ class Login extends React.Component {
           <input className="password-input input" type="password" placeholder="Retype Password" value={this.state.rePassword} onChange={this.rePasswordChanged}></input>
           <div className="policy-div">
             <input className="policy checkbox" name="privacy-policy" id="privacy-policy" type="checkbox" defaultChecked={this.state.checked} onChange={this.handleCheck}/>
-            <label className="policy" for="privacy-policy">I agree to the <a href="#">privacy policy</a></label>
+            <label className="policy" for="privacy-policy">I agree to the <a href="https://coursifyit.com/about">privacy policy</a></label>
           </div>
           
         </div>

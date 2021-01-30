@@ -2,6 +2,7 @@ import React from "react";
 import "./styles/Home.css";
 import landingLogo from "../assets/Logo-for-landing-page.png";
 import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
+import { verifyAccount } from "../api";
 
 class Home extends React.Component {
   constructor(props) {
@@ -12,6 +13,16 @@ class Home extends React.Component {
     };
     this.searchRedirect = this.searchRedirect.bind(this);
     this.reviewRedirect = this.reviewRedirect.bind(this);
+  }
+
+  componentDidMount() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const accountID = urlParams.get("id");
+    const key = urlParams.get("key");
+    if (accountID !== null && key !== null) {
+      verifyAccount(accountID, key);
+    }
   }
 
   searchRedirect = () => {

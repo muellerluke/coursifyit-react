@@ -92,6 +92,9 @@
         height: 5%;
         top: 95%;
     }
+    .directions-body {
+        overflow-y: scroll;
+    }
     #directions-body-shown {
         height: 88%;
         top: 12%;

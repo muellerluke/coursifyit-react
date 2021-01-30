@@ -26,6 +26,21 @@ async function login(username, password) {
     });
 }
 
+async function verifyAccount(id, key) {
+  var apiUrl = "https://class-review.com:4040";
+  return axios({
+    url: apiUrl + "/Account/verify/" + id + "/" + key,
+    method: "POST",
+  })
+    .then((response) => {
+     return true;
+    })
+    .catch(function (error) {
+      console.log(error);
+      return false;
+    });
+}
+
 async function logOut() {
   localStorage.setItem("token", "");
   localStorage.setItem("username", "");
@@ -340,7 +355,21 @@ async function postReview(school, course, teacher, review) {
   })
 
 }
+async function putPassword(id, password) {
+  var apiUrl = "https://class-review.com:4040";
+  return axios({
+    url: apiUrl + "/Account/resetpassword/" + id,
+    method: "PUT",
+    data: { Password: password },
+  }).then((response) => {
+    return true;
+  }).catch((error)=> {
+    console.log(error);
+    return false;
+  })
+}
 
 export { postReview, login, getReviews, changeReview, logOut, sendVerification, 
   resetPassword, requestSchools, requestCourses, requestTeachers, getReviewResults,
-   getUnlockedReviews, verifyToken, unlockClass, forgotMyPassword, registerUser, deleteAccount };
+   getUnlockedReviews, verifyToken, unlockClass, forgotMyPassword, registerUser, 
+   deleteAccount, verifyAccount, putPassword };
