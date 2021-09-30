@@ -1,6 +1,6 @@
 import React from "react";
 import "./styles/AccountReview.css";
-import { changeReview } from "../api";
+import { changeReview, deleteAccountReview } from "../api";
 
 class AccountReview extends React.Component {
     constructor(props) {
@@ -38,6 +38,15 @@ class AccountReview extends React.Component {
         this.updateReview = this.updateReview.bind(this);
         this.reviewValueChange = this.reviewValueChange.bind(this);
         this.reviewUpdated = this.reviewUpdated.bind(this);
+        this.deleteReview = this.deleteReview.bind(this);
+    }
+
+    deleteReview() {
+        if(window.confirm("Are you sure you want to delete this review?")) {
+            deleteAccountReview(this.state.id).then((result) => {
+                window.location.reload();
+            })
+        }
     }
 
     getTeacherIndex() {
@@ -221,7 +230,7 @@ class AccountReview extends React.Component {
                     <div className="col-lg-4 col-md-4 col-sm-12"><h5 className="account-review-text">Course: {this.props.review.Classes[0].Code}</h5></div>
                     <div className="col-lg-4 col-md-4 col-sm-12"><h5 className="account-review-text">Teacher: {this.props.review.Classes[0].Teachers[0].Name}</h5></div>
                     <div className="col-lg-4 col-md-4 col-sm-12 button-column">
-                        <button className="account-review-delete" >Delete</button>
+                        <button className="account-review-delete" onClick={this.deleteReview}>Delete</button>
                     </div>
                 </div>
                 {this.renderDetails()}

@@ -1,6 +1,5 @@
 import axios from "axios";
 
-var username = localStorage.getItem("username");
 async function login(username, password) {
   var apiUrl = "https://class-review.com:4040";
   return axios({
@@ -347,6 +346,7 @@ async function postReview(school, course, teacher, review) {
         data: tempReview,
         method: "POST"
       }).then((response) => {
+        localStorage.setItem("searches", parseInt(localStorage.getItem("searches")) + 1);
         return true
       }).catch((error) => {
         return false;
@@ -369,7 +369,39 @@ async function putPassword(id, password) {
   })
 }
 
+
+async function getAccount() {
+  var apiUrl = "https://class-review.com:4040";
+  return axios({
+    url: apiUrl + "/Account/" + localStorage.getItem("username"),
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+    method: "GET",
+  }).then((json) => {
+    localStorage.setItem("verified", json.data.Verified)
+    return json.data.Verified;
+  }).catch((error)=> {
+    console.log(error);
+    return "error";
+  })
+}
+
+async function deleteAccountReview(id) {
+  const apiUrl = "https://class-review.com:4040";
+  return axios({
+    url: apiUrl + "/users/" + localStorage.getItem("username") + "/reviews/" + id,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+    method: "DELETE"
+  }).then((result) => {
+    return true;
+  }).catch((error) => {
+    return error;
+  })
+}
 export { postReview, login, getReviews, changeReview, logOut, sendVerification, 
   resetPassword, requestSchools, requestCourses, requestTeachers, getReviewResults,
    getUnlockedReviews, verifyToken, unlockClass, forgotMyPassword, registerUser, 
-   deleteAccount, verifyAccount, putPassword };
+   deleteAccount, verifyAccount, putPassword, getAccount, deleteAccountReview };

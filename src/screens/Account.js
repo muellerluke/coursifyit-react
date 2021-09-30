@@ -1,7 +1,7 @@
 import React from "react";
 import "./styles/Account.css";
 import AccountReview from "./AccountReview";
-import {getReviews, logOut, sendVerification, resetPassword, deleteAccount} from "../api";
+import {getReviews, logOut, sendVerification, resetPassword, deleteAccount, getAccount} from "../api";
 import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 
 class Account extends React.Component {
@@ -13,7 +13,9 @@ class Account extends React.Component {
       reviewsLoaded: false,
       username: "",
       logOutState: false,
-      alertText: ""
+      alertText: "",
+      verified: true,
+      redirectPage: false,
     };
     this.renderReviews = this.renderReviews.bind(this);
     this.renderRedirect = this.renderRedirect.bind(this);
@@ -24,19 +26,27 @@ class Account extends React.Component {
     this.deleteAccountClick = this.deleteAccountClick.bind(this);
   }
   componentDidMount() {
-    this.props.updateSearchTokens();
-    this.setState({username: localStorage.getItem("username")})
-    if (window.innerWidth <= 768) {
-      if (localStorage.getItem("verified") === "true") {
-        this.setState({footerHeight: "122px"});
+    getAccount().then((result) => {
+      if (result === "error") {
+        this.setState({redirectPage: true});
       } else {
-        this.setState({footerHeight: "177px"});
+        this.setState({verified: result});
+      this.props.updateSearchTokens();
+      this.setState({username: localStorage.getItem("username")})
+      if (window.innerWidth <= 768) {
+        if (this.state.verified) {
+          this.setState({footerHeight: "122px"});
+        } else {
+          this.setState({footerHeight: "177px"});
+        }
+      } else {
+        if (this.state.verified) {
+          this.setState({footerHeight: "66px"});
+        }
       }
-    } else {
-      if (localStorage.getItem("verified") === "true") {
-        this.setState({footerHeight: "66px"});
       }
-    }
+      
+    })
   }
   checkReviews() {
     if (this.state.username !== "" && this.state.reviewsLoaded === false) {
@@ -79,6 +89,12 @@ class Account extends React.Component {
       return <Redirect to={{
         pathname: '/',
     }} />
+    } else if (this.state.redirectPage) {
+      logOut();
+      this.props.logoutSuccess();
+        return <Redirect to={{
+          pathname: '/login'
+        }} />
     }
   }
   sendVerificationClick() {
@@ -116,11 +132,11 @@ class Account extends React.Component {
           </div>
           <div className="account-body-header-body">
             <h5>Email: {localStorage.getItem("username")}</h5>
-            <h5>Verified: {localStorage.getItem("verified") ? "Yes" : "No"}</h5>
+            <h5>Verified: {this.state.verified ? "Yes" : "No"}</h5>
           </div>
           <div className="account-body-header-footer" style={{height: this.state.footerHeight}}>
             <button className="account-body-header-footer-button" id="logout-button" onClick={this.logOutClick}>Log Out</button>
-            <button className={localStorage.getItem("verified") === "true" ? "no-display" : "account-body-header-footer-button"}
+            <button className={this.state.verified ? "no-display" : "account-body-header-footer-button"}
             onClick={this.sendVerificationClick}>Send Verification Email</button>
             <button className="account-body-header-footer-button" id="reset-button"
             onClick={this.resetPasswordClick}>Reset Password</button>
@@ -138,7 +154,9 @@ class Account extends React.Component {
         {this.renderRedirect()}
       </div>;
     } else {
-      return <div></div>
+      return <Redirect to={{
+        pathname: '/login'
+      }} />
     }
     
   }

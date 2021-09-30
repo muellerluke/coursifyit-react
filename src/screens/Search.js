@@ -135,19 +135,19 @@ class Search extends React.Component {
                 total.MandatoryAttendence =
                   total.MandatoryAttendence + r.MandatoryAttendence;
               });
-              total.WouldTake = total.WouldTake / total.reviews;
-                total.Teacherness = total.Teacherness / total.reviews;
-                total.OverallDiff = total.OverallDiff / total.reviews;
-                total.HomeworkAmount = total.HomeworkAmount / total.reviews;
-                total.HomeworkDiff = total.HomeworkDiff / total.reviews;
-                total.QuizDiff = total.QuizDiff / total.reviews;
+              total.WouldTake = Math.round((total.WouldTake / total.reviews) * 10)/10;
+                total.Teacherness = Math.round((total.Teacherness / total.reviews) * 10)/10;
+                total.OverallDiff = Math.round((total.OverallDiff / total.reviews) * 10)/10;
+                total.HomeworkAmount = Math.round((total.HomeworkAmount / total.reviews) * 10)/10;
+                total.HomeworkDiff = Math.round((total.HomeworkDiff / total.reviews) * 10)/10;
+                total.QuizDiff = Math.round((total.QuizDiff / total.reviews) * 10)/10;
                 total.TeacherLikeness =
-                  total.TeacherLikeness / total.reviews;
-                total.TestDiff = total.TestDiff / total.reviews;
-                total.ExamDiff = total.ExamDiff / total.reviews;
-                total.Multitasking = total.Multitasking *100 / total.reviews;
+                Math.round((total.TeacherLikeness / total.reviews) * 10)/10;
+                total.TestDiff = Math.round((total.TestDiff / total.reviews) * 10)/10;
+                total.ExamDiff = Math.round((total.ExamDiff / total.reviews) * 10)/10;
+                total.Multitasking = Math.round((total.Multitasking *100 / total.reviews) * 10)/10;
                 total.MandatoryAttendence =
-                  total.MandatoryAttendence * 100 / total.reviews;
+                Math.round((total.MandatoryAttendence * 100 / total.reviews) * 10)/10;
               var tempArr = this.state.reviewData;
               tempArr.push(total);
               this.setState({reviewData: tempArr});
